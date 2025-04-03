@@ -30,8 +30,10 @@ const toastVariants = cva(
     variants: {
       variant: {
         default: "border bg-background text-foreground",
-        destructive:
-          "destructive group border-destructive bg-destructive text-destructive-foreground",
+        success: "border border-[var(--toast-success)] bg-[var(--toast-success)/10] text-[var(--toast-success)] dark:bg-[var(--toast-success)/20]",
+        info: "border border-[var(--toast-info)] bg-[var(--toast-info)/10] text-[var(--toast-info)] dark:bg-[var(--toast-info)/20]",
+        warning: "border border-[var(--toast-warning)] bg-[var(--toast-warning)/10] text-[var(--toast-warning)] dark:bg-[var(--toast-warning)/20]",
+        destructive: "border border-[var(--toast-error)] bg-[var(--toast-error)/10] text-[var(--toast-error)] dark:bg-[var(--toast-error)/20]",
       },
     },
     defaultVariants: {
@@ -62,7 +64,11 @@ const ToastAction = React.forwardRef<
   <ToastPrimitives.Action
     ref={ref}
     className={cn(
-      "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive",
+      "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+      "group-[.success]:border-[var(--toast-success)/30] group-[.success]:hover:border-[var(--toast-success)] group-[.success]:hover:bg-[var(--toast-success)] group-[.success]:hover:text-white group-[.success]:focus:ring-[var(--toast-success)]",
+      "group-[.info]:border-[var(--toast-info)/30] group-[.info]:hover:border-[var(--toast-info)] group-[.info]:hover:bg-[var(--toast-info)] group-[.info]:hover:text-white group-[.info]:focus:ring-[var(--toast-info)]",
+      "group-[.warning]:border-[var(--toast-warning)/30] group-[.warning]:hover:border-[var(--toast-warning)] group-[.warning]:hover:bg-[var(--toast-warning)] group-[.warning]:hover:text-white group-[.warning]:focus:ring-[var(--toast-warning)]",
+      "group-[.destructive]:border-[var(--toast-error)/30] group-[.destructive]:hover:border-[var(--toast-error)] group-[.destructive]:hover:bg-[var(--toast-error)] group-[.destructive]:hover:text-white group-[.destructive]:focus:ring-[var(--toast-error)]",
       className
     )}
     {...props}
@@ -77,7 +83,11 @@ const ToastClose = React.forwardRef<
   <ToastPrimitives.Close
     ref={ref}
     className={cn(
-      "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600",
+      "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100",
+      "group-[.success]:text-[var(--toast-success)/70] group-[.success]:hover:text-[var(--toast-success)] group-[.success]:focus:ring-[var(--toast-success)]",
+      "group-[.info]:text-[var(--toast-info)/70] group-[.info]:hover:text-[var(--toast-info)] group-[.info]:focus:ring-[var(--toast-info)]",
+      "group-[.warning]:text-[var(--toast-warning)/70] group-[.warning]:hover:text-[var(--toast-warning)] group-[.warning]:focus:ring-[var(--toast-warning)]",
+      "group-[.destructive]:text-[var(--toast-error)/70] group-[.destructive]:hover:text-[var(--toast-error)] group-[.destructive]:focus:ring-[var(--toast-error)]",
       className
     )}
     toast-close=""

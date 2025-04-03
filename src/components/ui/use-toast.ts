@@ -6,6 +6,8 @@ import type {
   ToastProps,
 } from "@/components/ui/toast"
 
+export type ToastVariant = "default" | "success" | "info" | "warning" | "destructive"
+
 const TOAST_LIMIT = 5
 const TOAST_REMOVE_DELAY = 5000
 

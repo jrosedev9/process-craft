@@ -136,14 +136,14 @@ export function KanbanBoard({ project }: KanbanBoardProps) {
         toast({
           title: "Error",
           description: result.message || "Failed to update task status",
-          variant: "destructive"
+          variant: "destructive" // Using our red error toast
         });
       } else if (result?.status === "success") {
         // Show success message (optional)
         toast({
           title: "Success",
           description: "Task moved successfully",
-          variant: "default"
+          variant: "success" // Using our green success toast
         });
       }
     } catch (error) {
@@ -160,7 +160,7 @@ export function KanbanBoard({ project }: KanbanBoardProps) {
       toast({
         title: "Error",
         description: "Failed to update task status. Please try again.",
-        variant: "destructive"
+        variant: "destructive" // Using our red error toast
       });
 
       console.error("Error updating task status:", error);
