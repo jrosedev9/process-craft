@@ -21,12 +21,13 @@ function ProjectLoading() {
 }
 
 interface ProjectPageProps {
-  params: {
+  params: Promise<{
     projectId: string;
-  };
+  }>;
 }
 
-export default async function ProjectPage({ params }: ProjectPageProps) {
+export default async function ProjectPage(props: ProjectPageProps) {
+  const params = await props.params;
   const { projectId } = params;
 
   // Fetch project data with tasks
@@ -40,8 +41,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   return (
-    <div>
-      <ProjectHeader project={project} />
+    <div className="container mx-auto px-4 py-6 max-w-7xl">
+      <div className="bg-card rounded-xl border shadow-sm p-6 mb-8 border-[var(--border)]">
+        <ProjectHeader project={project} />
+      </div>
 
       <Suspense fallback={<ProjectLoading />}>
         <KanbanBoard project={project} />
@@ -50,8 +53,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   );
 }
 
-// Create a not-found page for this route
-export function generateMetadata({ params }: ProjectPageProps) {
+// Create metadata for this route
+export async function generateMetadata(props: ProjectPageProps) {
+  const params = await props.params;
+  // In Next.js 15.2, we need to await params before accessing its properties
   return {
     title: `Project - ${params.projectId}`,
   };

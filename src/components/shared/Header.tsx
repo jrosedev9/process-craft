@@ -12,31 +12,31 @@ interface HeaderProps {
 
 export default function Header({ user }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-border bg-background px-4 md:px-6">
+    <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-border bg-[var(--midnight-blue)] text-white px-4 md:px-6">
       <div>
         {/* Placeholder for Logo or Site Title */}
-        <Link href={user ? "/dashboard" : "/"} className="font-semibold">
-          ProcessCraft
+        <Link href={user ? "/dashboard" : "/"} className="font-bold text-xl tracking-tight">
+          Process<span className="text-[var(--amber-orange)]">Craft</span>
         </Link>
       </div>
       <div className="flex items-center gap-2 sm:gap-4">
         {user ? (
           <>
-            <span className="text-sm text-muted-foreground hidden sm:inline">
+            <span className="text-sm text-white/70 inline-block">
               {user.email ?? "User"}
             </span>
             <form action={logoutAction}>
-              <Button variant="outline" size="sm" type="submit">
+              <Button variant="outline" size="sm" type="submit" className="border-white text-white hover:bg-white/20 hover:text-white hover:border-white">
                 Logout
               </Button>
             </form>
           </>
         ) : (
           <>
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="ghost" size="sm" asChild className="text-white hover:bg-white/20 hover:text-white">
               <Link href="/login">Login</Link>
             </Button>
-            <Button variant="default" size="sm" asChild>
+            <Button variant="default" size="sm" asChild className="bg-[var(--amber-orange)] hover:bg-[var(--amber-orange)]/80">
               <Link href="/register">Register</Link>
             </Button>
           </>
@@ -44,4 +44,4 @@ export default function Header({ user }: HeaderProps) {
       </div>
     </header>
   );
-} 
+}
