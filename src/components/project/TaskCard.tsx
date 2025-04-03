@@ -5,8 +5,9 @@ import { Task } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { TaskFormDialog } from "./TaskFormDialog";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, ClockIcon, CheckCircleIcon, CircleIcon } from "lucide-react";
+import { CalendarIcon, ClockIcon, CheckCircleIcon, CircleIcon, GripVerticalIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useDraggable } from "@dnd-kit/core";
 
 interface TaskCardProps {
   task: Task;
@@ -44,22 +45,59 @@ export function TaskCard({ task, status }: TaskCardProps) {
   // Only show status badge if the task status is different from the column status
   const showStatusBadge = status !== task.status;
 
+  // Set up draggable
+  const { attributes, listeners, setNodeRef, isDragging, transform } = useDraggable({
+    id: task.id,
+    data: {
+      type: 'task',
+      task
+    }
+  });
+
+  const style = transform ? {
+    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    zIndex: 999,
+  } : undefined;
+
   return (
     <>
-      <Card
-        className="cursor-pointer hover:shadow-md transition-all duration-200 overflow-hidden group"
-        onClick={() => setIsEditOpen(true)}
+      <div
+        ref={setNodeRef}
+        style={style}
+        className={cn(
+          isDragging ? "opacity-50" : "opacity-100",
+          "touch-none"
+        )}
       >
+        <Card
+          className={cn(
+            "hover:shadow-md transition-all duration-200 overflow-hidden group",
+            isDragging ? "shadow-lg ring-2 ring-primary" : ""
+          )}
+          onClick={(e) => {
+            // Don't open edit dialog when using drag handle
+            if ((e.target as HTMLElement).closest('.drag-handle')) return;
+            setIsEditOpen(true);
+          }}
+          {...attributes}
+          {...listeners}
+        >
         <div className={cn(
           "h-1 w-full",
           task.status === "To Do" ? "bg-[var(--status-todo)]" :
           task.status === "In Progress" ? "bg-[var(--status-in-progress)]" :
           "bg-[var(--status-done)]"
         )} />
-        <CardHeader className="p-3 pb-1">
+        <CardHeader className="p-3 pb-1 flex justify-between items-start">
           <CardTitle className="text-sm font-medium group-hover:text-primary transition-colors">
             {task.title}
           </CardTitle>
+          <div
+            className="drag-handle cursor-grab active:cursor-grabbing p-1 -mt-1 -mr-1 rounded hover:bg-muted/50"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <GripVerticalIcon className="h-4 w-4 text-muted-foreground" />
+          </div>
         </CardHeader>
         {task.description && (
           <CardContent className="p-3 pt-1 pb-2">
@@ -81,6 +119,7 @@ export function TaskCard({ task, status }: TaskCardProps) {
           )}
         </CardFooter>
       </Card>
+      </div>
 
       <TaskFormDialog
         open={isEditOpen}

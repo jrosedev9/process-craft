@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon, CircleIcon, ClockIcon, CheckCircleIcon, MoreHorizontalIcon } from "lucide-react";
 import { TaskFormDialog } from "./TaskFormDialog";
 import { cn } from "@/lib/utils";
+import { useDroppable } from "@dnd-kit/core";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -52,6 +53,15 @@ export function KanbanColumn({
     }
   }, [icon]);
 
+  // Set up droppable area
+  const { setNodeRef, isOver } = useDroppable({
+    id: status,
+    data: {
+      accepts: ['task'],
+      status
+    },
+  });
+
   return (
     <div className="flex flex-col h-full bg-card rounded-xl border shadow-sm overflow-hidden">
       {/* Column header */}
@@ -91,7 +101,13 @@ export function KanbanColumn({
       </div>
 
       {/* Task list */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-muted/5">
+      <div
+        ref={setNodeRef}
+        className={cn(
+          "flex-1 overflow-y-auto p-3 space-y-2 transition-colors",
+          isOver ? "bg-muted/20" : "bg-muted/5"
+        )}
+      >
         {tasks.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-32 text-center py-8 text-muted-foreground text-sm border-2 border-dashed rounded-lg border-muted m-2">
             <p>No tasks yet</p>
