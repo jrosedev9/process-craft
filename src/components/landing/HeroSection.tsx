@@ -24,14 +24,14 @@ export function HeroSection() {
             transition={{ duration: 0.6 }}
             className="flex flex-col space-y-6"
           >
-            <Badge 
-              variant="outline" 
+            <Badge
+              variant="outline"
               className="w-fit border-[var(--amber-orange)]/30 text-[var(--amber-orange)] bg-[var(--amber-orange)]/10 px-4 py-1"
             >
               Project Management Simplified
             </Badge>
-            
-            <motion.h1 
+
+            <motion.h1
               className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -39,8 +39,8 @@ export function HeroSection() {
             >
               Streamline Your <span className="text-[var(--amber-orange)]">Workflow</span> with ProcessCraft
             </motion.h1>
-            
-            <motion.p 
+
+            <motion.p
               className="text-lg md:text-xl text-white/80 max-w-xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -48,8 +48,8 @@ export function HeroSection() {
             >
               A modern project management tool designed to help teams collaborate, track progress, and deliver projects on time.
             </motion.p>
-            
-            <motion.div 
+
+            <motion.div
               className="flex flex-col sm:flex-row gap-4 pt-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -61,14 +61,14 @@ export function HeroSection() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="border-white/20 text-white hover:bg-white/10">
+              <Button size="lg" variant="outline" asChild className="border-white/20 text-white hover:bg-white/10 bg-white/5">
                 <Link href="#how-it-works">
                   Learn More
                 </Link>
               </Button>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -76,8 +76,8 @@ export function HeroSection() {
             >
               <div className="flex -space-x-2">
                 {[1, 2, 3, 4].map((i) => (
-                  <div 
-                    key={i} 
+                  <div
+                    key={i}
                     className="w-8 h-8 rounded-full border-2 border-[var(--midnight-blue)] bg-gray-300"
                     style={{ zIndex: 5 - i }}
                   />
@@ -88,7 +88,7 @@ export function HeroSection() {
               </p>
             </motion.div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -97,7 +97,7 @@ export function HeroSection() {
           >
             <div className="relative bg-gradient-to-br from-white/10 to-white/5 rounded-xl border border-white/10 shadow-xl overflow-hidden">
               <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
-              
+
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-2">
@@ -107,7 +107,7 @@ export function HeroSection() {
                   </div>
                   <div className="text-xs text-white/50">ProcessCraft Dashboard</div>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div className="h-8 bg-white/10 rounded w-1/3"></div>
                   <div className="grid grid-cols-3 gap-4">
@@ -143,9 +143,9 @@ export function HeroSection() {
                 </div>
               </div>
             </div>
-            
+
             {/* Floating Elements */}
-            <motion.div 
+            <motion.div
               className="absolute -top-6 -right-6 bg-[var(--sage-green)] text-white p-3 rounded-lg shadow-lg flex items-center gap-2"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -154,8 +154,8 @@ export function HeroSection() {
               <CheckCircle className="h-5 w-5" />
               <span className="text-sm font-medium">Task Completed</span>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               className="absolute -bottom-4 -left-4 bg-white text-[var(--midnight-blue)] p-3 rounded-lg shadow-lg"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}

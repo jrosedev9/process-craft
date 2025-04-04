@@ -98,7 +98,7 @@ export function LandingHeader() {
     >
       <div className="container mx-auto max-w-7xl flex h-16 items-center justify-between px-4 md:px-6">
         {/* Logo */}
-        <Link href="/" className="font-bold text-xl tracking-tight inline-flex items-center text-white">
+        <Link href="#" className="font-bold text-xl tracking-tight inline-flex items-center text-white">
           <div className="mr-1 h-8 w-8 rounded-md bg-[var(--amber-orange)] items-center justify-center text-white font-bold text-sm flex">PC</div>
           Process<span className="text-[var(--amber-orange)]">Craft</span>
         </Link>

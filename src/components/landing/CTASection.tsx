@@ -107,7 +107,7 @@ export function CTASection() {
                     <p className="text-sm text-white/60 mb-4">
                       All plans include a 14-day free trial with full access to all features.
                     </p>
-                    <Button variant="outline" size="sm" asChild className="w-full border-white/20 text-white hover:bg-white/10">
+                    <Button variant="outline" size="sm" asChild className="w-full border-white/20 text-white hover:bg-white/10 bg-white/5">
                       <Link href="/register">
                         Start Free Trial
                       </Link>
