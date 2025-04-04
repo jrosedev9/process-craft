@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import type { User } from "next-auth"; // Use Session['user'] if Session type is defined and exported
 import Link from "next/link"; // Import Link for navigation
+import { usePathname } from "next/navigation";
 import { logoutAction } from "@/app/actions/auth.actions"; // Import the server action
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,6 +25,19 @@ const getUserInitials = (user: User | undefined): string => {
 
 export default function Header({ user }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Check if the current path is active
+  const isActive = (path: string) => {
+    if (path === '/dashboard') {
+      return pathname === '/dashboard';
+    }
+    // For projects, check if the path starts with /projects
+    if (path === '/projects') {
+      return pathname === '/projects' || pathname.startsWith('/projects/');
+    }
+    return pathname === path;
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-gradient-to-r from-[var(--midnight-blue)] to-[#142c4c] text-white">
@@ -52,7 +66,10 @@ export default function Header({ user }: HeaderProps) {
                     <>
                       <Link
                         href="/dashboard"
-                        className="flex items-center gap-2 text-sm font-medium hover:text-[var(--amber-orange)] transition-colors"
+                        className={cn(
+                          "flex items-center gap-2 text-sm font-medium hover:text-[var(--amber-orange)] transition-colors",
+                          isActive('/dashboard') && "text-[var(--amber-orange)]"
+                        )}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <Home className="h-4 w-4" />
@@ -60,7 +77,10 @@ export default function Header({ user }: HeaderProps) {
                       </Link>
                       <Link
                         href="/projects"
-                        className="flex items-center gap-2 text-sm font-medium hover:text-[var(--amber-orange)] transition-colors"
+                        className={cn(
+                          "flex items-center gap-2 text-sm font-medium hover:text-[var(--amber-orange)] transition-colors",
+                          isActive('/projects') && "text-[var(--amber-orange)]"
+                        )}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <FolderKanban className="h-4 w-4" />
@@ -68,7 +88,10 @@ export default function Header({ user }: HeaderProps) {
                       </Link>
                       <Link
                         href="/settings"
-                        className="flex items-center gap-2 text-sm font-medium hover:text-[var(--amber-orange)] transition-colors"
+                        className={cn(
+                          "flex items-center gap-2 text-sm font-medium hover:text-[var(--amber-orange)] transition-colors",
+                          isActive('/settings') && "text-[var(--amber-orange)]"
+                        )}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <Settings className="h-4 w-4" />
@@ -124,7 +147,8 @@ export default function Header({ user }: HeaderProps) {
                 <Link href="/dashboard" legacyBehavior passHref>
                   <NavigationMenuLink className={cn(
                     navigationMenuTriggerStyle(),
-                    "bg-transparent text-white hover:bg-white/10 hover:text-white"
+                    "bg-transparent text-white hover:bg-white/10 hover:text-white",
+                    isActive('/dashboard') && "bg-white/10 text-[var(--amber-orange)]"
                   )}>
                     <LayoutDashboard className="h-4 w-4 mr-2" />
                     Dashboard
@@ -132,7 +156,10 @@ export default function Header({ user }: HeaderProps) {
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent text-white hover:bg-white/10 hover:text-white data-[state=open]:bg-white/10">
+                <NavigationMenuTrigger className={cn(
+                  "bg-transparent text-white hover:bg-white/10 hover:text-white data-[state=open]:bg-white/10",
+                  isActive('/projects') && "bg-white/10 text-[var(--amber-orange)]"
+                )}>
                   <FolderKanban className="h-4 w-4 mr-2" />
                   Projects
                 </NavigationMenuTrigger>

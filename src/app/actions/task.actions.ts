@@ -8,7 +8,7 @@ import {
   taskUpdateSchema,
   taskStatusUpdateSchema,
 } from "@/lib/validators";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql, count } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { v4 as uuidv4 } from "uuid";
 
@@ -315,6 +315,75 @@ export async function deleteTask(taskId: string): Promise<TaskActionState> {
       message: "Failed to delete task. Please try again.",
       errors: { _form: ["Database error occurred."] },
     };
+  }
+}
+
+/**
+ * Get task counts by status for the current user across all projects
+ * @returns Object with counts for each status or null if not authenticated
+ */
+export async function getTaskCounts() {
+  // 1. Check authentication
+  const session = await auth();
+  if (!session?.user?.id) {
+    return null;
+  }
+
+  try {
+    // Get all projects for the user
+    const userProjects = await db.query.projects.findMany({
+      where: eq(projects.userId, session.user.id),
+      columns: { id: true },
+    });
+
+    // If no projects, return zeros
+    if (!userProjects.length) {
+      return {
+        total: 0,
+        todo: 0,
+        inProgress: 0,
+        done: 0,
+      };
+    }
+
+    // Get project IDs
+    const projectIds = userProjects.map(project => project.id);
+
+    // Count tasks by status
+    const todoCount = await db.select({ count: count() })
+      .from(tasks)
+      .where(and(
+        eq(tasks.status, "To Do"),
+        sql`${tasks.projectId} IN (${projectIds.join(",")})`
+      ));
+
+    const inProgressCount = await db.select({ count: count() })
+      .from(tasks)
+      .where(and(
+        eq(tasks.status, "In Progress"),
+        sql`${tasks.projectId} IN (${projectIds.join(",")})`
+      ));
+
+    const doneCount = await db.select({ count: count() })
+      .from(tasks)
+      .where(and(
+        eq(tasks.status, "Done"),
+        sql`${tasks.projectId} IN (${projectIds.join(",")})`
+      ));
+
+    const totalCount = await db.select({ count: count() })
+      .from(tasks)
+      .where(sql`${tasks.projectId} IN (${projectIds.join(",")})`);
+
+    return {
+      total: totalCount[0]?.count || 0,
+      todo: todoCount[0]?.count || 0,
+      inProgress: inProgressCount[0]?.count || 0,
+      done: doneCount[0]?.count || 0,
+    };
+  } catch (error) {
+    console.error("Failed to fetch task counts:", error);
+    return null;
   }
 }
 
