@@ -17,7 +17,7 @@ export default async function MainLayout({
       <Header user={session?.user} />
       <div className="flex flex-1">
         {/* <Sidebar /> */} {/* Placeholder for a potential sidebar */}
-        <main className="flex-1 p-4 md:p-6 lg:p-8">{children}</main>
+        <main className="flex-1 container mx-auto max-w-7xl p-4 md:p-6 lg:p-8">{children}</main>
       </div>
       {/* <Footer /> */} {/* Optional: Placeholder for a footer */}
       <Toaster />

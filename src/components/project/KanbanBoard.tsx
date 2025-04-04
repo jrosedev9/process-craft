@@ -2,12 +2,21 @@
 
 import React, { useEffect, useState } from "react";
 import { Project, Task } from "@/lib/types";
-import { KanbanColumn } from "./KanbanColumn";
-import { DndContext, DragEndEvent, DragStartEvent, closestCenter, DragOverlay } from "@dnd-kit/core";
+import KanbanColumn from "./KanbanColumn";
+import {
+  DndContext,
+  DragEndEvent,
+  DragStartEvent,
+  closestCenter,
+  DragOverlay,
+} from "@dnd-kit/core";
 import { updateTaskStatus } from "@/app/actions/task.actions";
-import type { TaskActionState } from "@/app/actions/task.actions";
 import { TaskCard } from "./TaskCard";
 import { toast } from "@/components/ui/use-toast";
+import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { CircleIcon, ClockIcon, CheckCircleIcon } from "lucide-react";
 
 interface KanbanBoardProps {
   project: Project;
@@ -30,42 +39,86 @@ export function KanbanBoard({ project }: KanbanBoardProps) {
   if (!isClient) {
     return (
       <div className="space-y-4">
-        <div className="bg-white rounded-lg p-4 shadow-sm border mb-6">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-sm font-medium text-[#2D3436]">Task Progress</h3>
-            <span className="text-xs text-gray-500">Loading...</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2.5 mb-1">
-            <div className="bg-[#88B04B] h-2.5 rounded-full transition-all duration-300 ease-in-out" style={{ width: '0%' }}></div>
-          </div>
-          <div className="text-xs text-gray-500 text-right">Loading...</div>
-        </div>
+        <Card className="mb-6">
+          <CardHeader className="pb-2">
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-sm font-medium">
+                Task Progress
+              </CardTitle>
+              <span className="text-xs text-muted-foreground">Loading...</span>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Progress value={0} className="mb-1" />
+            <div className="text-xs text-muted-foreground text-right">
+              Loading...
+            </div>
+          </CardContent>
+        </Card>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 min-h-[calc(100vh-250px)]">
-          <div className="bg-muted/5 rounded-lg border p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-medium">To Do</h3>
-            </div>
-            <div className="animate-pulse space-y-3">
-              <div className="h-20 bg-gray-200 rounded"></div>
-              <div className="h-20 bg-gray-200 rounded"></div>
-            </div>
-          </div>
-          <div className="bg-muted/5 rounded-lg border p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-medium">In Progress</h3>
-            </div>
-            <div className="animate-pulse space-y-3">
-              <div className="h-20 bg-gray-200 rounded"></div>
-            </div>
-          </div>
-          <div className="bg-muted/5 rounded-lg border p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-medium">Done</h3>
-            </div>
-            <div className="animate-pulse space-y-3">
-              <div className="h-20 bg-gray-200 rounded"></div>
-            </div>
-          </div>
+          {/* To Do Column Skeleton */}
+          <Card className="flex flex-col h-full overflow-hidden">
+            <CardHeader className="flex flex-row justify-between items-center p-4 border-b bg-muted/10 space-y-0">
+              <div className="flex items-center gap-2">
+                <CircleIcon className="h-4 w-4 text-[var(--status-todo)]" />
+                <h3 className="font-medium text-sm">To Do</h3>
+                <Badge
+                  variant="secondary"
+                  className="text-xs h-5 px-1.5 rounded-full"
+                >
+                  0
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="flex-1 overflow-y-auto p-3 space-y-2 bg-muted/5">
+              <div className="animate-pulse space-y-3">
+                <div className="h-20 bg-muted rounded-md"></div>
+                <div className="h-20 bg-muted rounded-md"></div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* In Progress Column Skeleton */}
+          <Card className="flex flex-col h-full overflow-hidden">
+            <CardHeader className="flex flex-row justify-between items-center p-4 border-b bg-muted/10 space-y-0">
+              <div className="flex items-center gap-2">
+                <ClockIcon className="h-4 w-4 text-[var(--status-in-progress)]" />
+                <h3 className="font-medium text-sm">In Progress</h3>
+                <Badge
+                  variant="secondary"
+                  className="text-xs h-5 px-1.5 rounded-full"
+                >
+                  0
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="flex-1 overflow-y-auto p-3 space-y-2 bg-muted/5">
+              <div className="animate-pulse space-y-3">
+                <div className="h-20 bg-muted rounded-md"></div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Done Column Skeleton */}
+          <Card className="flex flex-col h-full overflow-hidden">
+            <CardHeader className="flex flex-row justify-between items-center p-4 border-b bg-muted/10 space-y-0">
+              <div className="flex items-center gap-2">
+                <CheckCircleIcon className="h-4 w-4 text-[var(--status-done)]" />
+                <h3 className="font-medium text-sm">Done</h3>
+                <Badge
+                  variant="secondary"
+                  className="text-xs h-5 px-1.5 rounded-full"
+                >
+                  0
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="flex-1 overflow-y-auto p-3 space-y-2 bg-muted/5">
+              <div className="animate-pulse space-y-3">
+                <div className="h-20 bg-muted rounded-md"></div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
@@ -73,14 +126,16 @@ export function KanbanBoard({ project }: KanbanBoardProps) {
 
   // Group tasks by status
   const todoTasks = localTasks.filter((task) => task.status === "To Do");
-  const inProgressTasks = localTasks.filter((task) => task.status === "In Progress");
+  const inProgressTasks = localTasks.filter(
+    (task) => task.status === "In Progress"
+  );
   const doneTasks = localTasks.filter((task) => task.status === "Done");
 
   // Handle drag start event
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     const taskId = active.id as string;
-    const task = localTasks.find(t => t.id === taskId);
+    const task = localTasks.find((t) => t.id === taskId);
     if (task) setActiveTask(task);
   };
 
@@ -98,7 +153,7 @@ export function KanbanBoard({ project }: KanbanBoardProps) {
     const newStatus = over.id as "To Do" | "In Progress" | "Done";
 
     // Find the task that was dragged
-    const draggedTask = localTasks.find(task => task.id === taskId);
+    const draggedTask = localTasks.find((task) => task.id === taskId);
 
     if (!draggedTask || draggedTask.status === newStatus) return;
 
@@ -109,11 +164,9 @@ export function KanbanBoard({ project }: KanbanBoardProps) {
     const newOrder = 0;
 
     // Optimistic update - update local state immediately
-    setLocalTasks(prevTasks =>
-      prevTasks.map(task =>
-        task.id === taskId
-          ? { ...task, status: newStatus }
-          : task
+    setLocalTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === taskId ? { ...task, status: newStatus } : task
       )
     );
 
@@ -124,43 +177,35 @@ export function KanbanBoard({ project }: KanbanBoardProps) {
       // Handle server response
       if (result?.status === "error") {
         // Revert optimistic update if server update failed
-        setLocalTasks(prevTasks =>
-          prevTasks.map(task =>
-            task.id === taskId
-              ? originalTask
-              : task
-          )
+        setLocalTasks((prevTasks) =>
+          prevTasks.map((task) => (task.id === taskId ? originalTask : task))
         );
 
         // Show error message
         toast({
           title: "Error",
           description: result.message || "Failed to update task status",
-          variant: "destructive" // Using our red error toast
+          variant: "destructive", // Using our red error toast
         });
       } else if (result?.status === "success") {
         // Show success message (optional)
         toast({
           title: "Success",
           description: "Task moved successfully",
-          variant: "success" // Using our green success toast
+          variant: "success", // Using our green success toast
         });
       }
     } catch (error) {
       // Revert optimistic update on exception
-      setLocalTasks(prevTasks =>
-        prevTasks.map(task =>
-          task.id === taskId
-            ? originalTask
-            : task
-        )
+      setLocalTasks((prevTasks) =>
+        prevTasks.map((task) => (task.id === taskId ? originalTask : task))
       );
 
       // Show error message
       toast({
         title: "Error",
         description: "Failed to update task status. Please try again.",
-        variant: "destructive" // Using our red error toast
+        variant: "destructive", // Using our red error toast
       });
 
       console.error("Error updating task status:", error);
@@ -170,24 +215,28 @@ export function KanbanBoard({ project }: KanbanBoardProps) {
   // Calculate task counts for display
   const totalTasks = localTasks.length;
   const completedTasks = doneTasks.length;
-  const completionPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const completionPercentage =
+    totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   return (
     <div className="space-y-4">
       {/* Task progress summary */}
-      <div className="bg-white rounded-lg p-4 shadow-sm border mb-6">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="text-sm font-medium text-[#2D3436]">Task Progress</h3>
-          <span className="text-xs text-gray-500">{completedTasks} of {totalTasks} tasks completed</span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2.5 mb-1">
-          <div
-            className="bg-[#88B04B] h-2.5 rounded-full transition-all duration-300 ease-in-out"
-            style={{ width: `${completionPercentage}%` }}
-          ></div>
-        </div>
-        <div className="text-xs text-gray-500 text-right">{completionPercentage}% complete</div>
-      </div>
+      <Card className="mb-6">
+        <CardHeader className="pb-2">
+          <div className="flex justify-between items-center">
+            <CardTitle className="text-sm font-medium">Task Progress</CardTitle>
+            <span className="text-xs text-muted-foreground">
+              {completedTasks} of {totalTasks} tasks completed
+            </span>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <Progress value={completionPercentage} className="mb-1" />
+          <div className="text-xs text-muted-foreground text-right">
+            {completionPercentage}% complete
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Kanban columns */}
       <DndContext

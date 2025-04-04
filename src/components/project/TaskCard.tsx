@@ -30,17 +30,41 @@ export function TaskCard({ task, status }: TaskCardProps) {
   const getStatusInfo = () => {
     switch (task.status) {
       case "To Do":
-        return { color: "text-[var(--status-todo)] bg-[var(--status-todo)]/10", icon: CircleIcon };
+        return {
+          textColor: "text-[var(--status-todo)]",
+          bgColor: "bg-[var(--status-todo)]/10",
+          borderColor: "border-[var(--status-todo)]/20",
+          accentColor: "bg-[var(--status-todo)]",
+          icon: CircleIcon
+        };
       case "In Progress":
-        return { color: "text-[var(--status-in-progress)] bg-[var(--status-in-progress)]/10", icon: ClockIcon };
+        return {
+          textColor: "text-[var(--status-in-progress)]",
+          bgColor: "bg-[var(--status-in-progress)]/10",
+          borderColor: "border-[var(--status-in-progress)]/20",
+          accentColor: "bg-[var(--status-in-progress)]",
+          icon: ClockIcon
+        };
       case "Done":
-        return { color: "text-[var(--status-done)] bg-[var(--status-done)]/10", icon: CheckCircleIcon };
+        return {
+          textColor: "text-[var(--status-done)]",
+          bgColor: "bg-[var(--status-done)]/10",
+          borderColor: "border-[var(--status-done)]/20",
+          accentColor: "bg-[var(--status-done)]",
+          icon: CheckCircleIcon
+        };
       default:
-        return { color: "text-gray-500 bg-gray-50", icon: CircleIcon };
+        return {
+          textColor: "text-muted-foreground",
+          bgColor: "bg-muted/10",
+          borderColor: "border-muted",
+          accentColor: "bg-muted",
+          icon: CircleIcon
+        };
     }
   };
 
-  const { color, icon: StatusIcon } = getStatusInfo();
+  const { textColor, bgColor, borderColor, accentColor, icon: StatusIcon } = getStatusInfo();
 
   // Only show status badge if the task status is different from the column status
   const showStatusBadge = status !== task.status;
@@ -82,12 +106,7 @@ export function TaskCard({ task, status }: TaskCardProps) {
           {...attributes}
           {...listeners}
         >
-        <div className={cn(
-          "h-1 w-full",
-          task.status === "To Do" ? "bg-[var(--status-todo)]" :
-          task.status === "In Progress" ? "bg-[var(--status-in-progress)]" :
-          "bg-[var(--status-done)]"
-        )} />
+        <div className={cn("h-1 w-full", accentColor)} />
         <CardHeader className="p-3 pb-1 flex justify-between items-start">
           <CardTitle className="text-sm font-medium group-hover:text-primary transition-colors">
             {task.title}
@@ -112,7 +131,7 @@ export function TaskCard({ task, status }: TaskCardProps) {
             {formatDate(task.createdAt)}
           </div>
           {showStatusBadge && (
-            <Badge variant="outline" className={cn("text-xs px-2 py-0 h-5 flex items-center gap-1", color)}>
+            <Badge variant="outline" className={cn("text-xs px-2 py-0 h-5 flex items-center gap-1", textColor, bgColor, borderColor)}>
               <StatusIcon className="h-2.5 w-2.5" />
               {task.status}
             </Badge>

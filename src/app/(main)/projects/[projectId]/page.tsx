@@ -41,7 +41,7 @@ export default async function ProjectPage(props: ProjectPageProps) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-7xl">
+    <div>
       <div className="bg-card rounded-xl border shadow-sm p-6 mb-8 border-[var(--border)]">
         <ProjectHeader project={project} />
       </div>
